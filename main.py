@@ -9,7 +9,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.externals import joblib
 from sklearn import linear_model
 from openpyxl import Workbook
-
+import pickle
 from time import sleep
 
 
@@ -98,7 +98,7 @@ model.fit(X_train, y_train)
 print('done training ...')
 
 # Save trained model to pkl file
-joblib.dump(model,'testTrainData.pkl')
+pickle.dump(model, open('testTrainData.pkl', 'wb'))
 
 # Find training error rate
 mse = mean_absolute_error(y_train, model.predict(X_train))
@@ -108,6 +108,10 @@ print("Training set mean absolute error: %.4f" % mse)
 mse = mean_absolute_error(y_test, model.predict(X_test))
 print("Test set mean absolute error: %.4f" % mse)
 
+# load the model from disk
+loadedModel = pickle.load(open('testTrainData.pkl', 'rb'))
+result = loadedModel.score(X_test, y_test)
+print(result)
 
 ##################################################################################################
 # Renders text(score) to screen at x , y
