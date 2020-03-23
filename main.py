@@ -1,9 +1,16 @@
 import pygame
 import random
 import math
-
+import pickle
 from time import sleep
-
+from sklearn.datasets import make_regression
+from sklearn import ensemble
+from sklearn.ensemble._hist_gradient_boosting import predictor
+from sklearn.metrics import mean_absolute_error
+from sklearn.externals import joblib
+from sklearn import linear_model
+from openpyxl import Workbook
+from sklearn.linear_model import LinearRegression
 
 # intialize the pygame
 pygame.init()
@@ -58,6 +65,14 @@ errorRate = 1
 
 # Game restart
 gameOver = False
+
+loadedModel = pickle.load(open('LRtestTrainData.pkl', 'rb'))
+Xnew, _ = make_regression(n_samples=3, n_features=825, noise=0.1, random_state=1)
+ynew = loadedModel.predict(Xnew)
+
+
+#use model to move player towards playerpos?
+# print test of playerPos if obstalce 450 and coin 650
 
 #################################################################################################
 

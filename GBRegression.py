@@ -14,25 +14,32 @@ df = pd.read_csv("MLDrivingData.csv")
 
 items_df = pd.get_dummies(df, columns=['ObstacleXPos', 'CoinXPos'])
 
-# Create the X and Y arrays
+# Create the X and Y arrays..  these are the values you might be passing in to predictor and stuff
 X = items_df.values
+# .values is used to convert the data into an array
 y = df['PlayerPos'].values
+####
+# Set player pos towards X items df valaueus
 
 # Split the data set in a trining set (70%) and test set (30%)
 X_train, X_test, y_train, y_test = train_test_split(X,y, test_size= 0.3, random_state= 0)
 
 # Fit regression model
 model = ensemble.GradientBoostingRegressor(
-    n_estimators=2000,
+    n_estimators=1000,
     learning_rate=0.1,
-    max_depth=16,
-    min_samples_leaf=9,
+    max_depth=6,
+    min_samples_leaf=7,
     max_features=0.1,
     loss='huber',
     random_state=0
 )
 print('Doing training.')
+
+#### The thing that I will be dumping
 model.fit(X_train, y_train)
+######
+
 print('Done training.')
 # Find training error rate
 mse = mean_absolute_error(y_train, model.predict(X_train))
@@ -44,11 +51,11 @@ print("Test set mean absolute error: %.4f" % mse)
 
 
 # Save trained model to pkl file
-pickle.dump(model, open('testTrainData.pkl', 'wb'))
+pickle.dump(model, open('GBRtestTrainData.pkl', 'wb'))
 
 
 # load the model from disk
-loadedModel = pickle.load(open('testTrainData.pkl', 'rb'))
+loadedModel = pickle.load(open('GBRtestTrainData.pkl', 'rb'))
 
 result = loadedModel.score(X_test, y_test)
 #outcome = model.predict(X=X_test)
@@ -62,3 +69,9 @@ print('Accurucay of unseen data ' , result)
 #plt.plot(X_train, model.predict(X_train), color='black')
 
 #plt.show()
+
+outcome = model.predict(X_test)
+print(outcome)
+#coefficients = model.coef_
+
+#print('Outcome : {}\nCoefficients : {}'.format(outcome, coefficients))
