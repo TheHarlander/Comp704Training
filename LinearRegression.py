@@ -8,31 +8,34 @@ from sklearn import metrics
 #now got 3 columns in excel sheet
 from sklearn.model_selection import train_test_split
 import pickle
+
+
+
 data = pd.read_csv("MLDrivingData.csv")
 
 data.shape
-
 print(data.describe())
 
 X = data['CoinXPos'].values.reshape(-1,1)
 y = data['PlayerPos'].values.reshape(-1,1)
 
-
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
+# Regresssion and fitting
 regressor = LinearRegression()
-regressor.fit(X_train, y_train) #training the algorithm
+regressor.fit(X_train, y_train)
 
-#To retrieve the intercept:
+# Get info
 print(regressor.intercept_)
-#For retrieving the slope:
 print(regressor.coef_)
 
+# predict
 y_pred = regressor.predict(X_test)
 
 df = pd.DataFrame({'Actual': y_test.flatten(), 'Predicted': y_pred.flatten()})
 print(df)
 
+# more info
 print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
 print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
 print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
@@ -46,6 +49,7 @@ loadedModel = pickle.load(open('LRtestTrainData.pkl', 'rb'))
 result = loadedModel.score(X_test, y_test)
 print(result)
 
+# Things I've played with (Kept in case of use in dev log)
 
 '''
 data.plot(x='CoinXPos', y ='PlayerPos', style='o')
